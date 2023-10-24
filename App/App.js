@@ -1,21 +1,51 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import CounterPage from "./Screens/CounterScreen";
+import { useEffect, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { onAuthStateChanged } from "firebase/auth";
+import Login from "./Screens/Login";
+import ToDos from "./Screens/ToDos";
+import Profile from "./Screens/Profile";
+import { FIREBASE_AUTH } from "./firebase/firebase_config";
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+const InsideStack = createNativeStackNavigator();
+
+function InsideStackScreen() {
   return (
-    <View style={styles.container}>
-      <CounterPage />
-      <StatusBar style="auto" />
-    </View>
+    <InsideStack.Navigator>
+      <InsideStack.Screen name="Profile" component={Profile} />
+      <InsideStack.Screen name="To Dos" component={ToDos} />
+    </InsideStack.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      setUser(user);
+    });
+  }, []);
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        {user ? (
+          <Stack.Screen
+            name="LoggedIn"
+            component={InsideStackScreen}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}

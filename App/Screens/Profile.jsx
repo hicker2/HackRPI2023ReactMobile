@@ -6,7 +6,7 @@ const Profile = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Button title="Logout" onPress={() => FIREBASE_AUTH.signOut()} />
-      <Button title="To Dos" onPress={() => navigation.navigate('To Dos')} />
+      <Button title="Messages" onPress={() => navigation.navigate('Messages')} />
     </View>
   )
 }

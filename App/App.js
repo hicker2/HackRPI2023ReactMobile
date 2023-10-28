@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
 import Login from "./Screens/Login";
-import ToDos from "./Screens/ToDos";
+import Messages from "./Screens/Messaages";
 import Profile from "./Screens/Profile";
 import { FIREBASE_AUTH } from "./firebase/firebase_config";
 
@@ -15,7 +15,7 @@ function InsideStackScreen() {
   return (
     <InsideStack.Navigator>
       <InsideStack.Screen name="Profile" component={Profile} />
-      <InsideStack.Screen name="To Dos" component={ToDos} />
+      <InsideStack.Screen name="Messages" component={Messages} />
     </InsideStack.Navigator>
   );
 }

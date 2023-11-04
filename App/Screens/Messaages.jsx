@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, Button, KeyboardAvoidingView, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { FIREBASE_DB, FIREBASE_AUTH } from '../firebase/firebase_config';
 import { collection, query, onSnapshot, setDoc, doc, serverTimestamp } from 'firebase/firestore';
@@ -6,6 +6,7 @@ import { collection, query, onSnapshot, setDoc, doc, serverTimestamp } from 'fir
 export default function ChatScreen() {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const scrollview = useRef();
   const user = FIREBASE_AUTH.currentUser;
   const db = FIREBASE_DB;
 
@@ -50,7 +51,10 @@ export default function ChatScreen() {
     >
     <View style={styles.container}>
       {/* Display Messages */}
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView 
+      ref={scrollview}
+      onContentSizeChange={() => scrollview.current.scrollToEnd({ animated: true })}
+      style={{ flex: 1 }}>
         {messages.map((message) => (
           <Text
           style={
